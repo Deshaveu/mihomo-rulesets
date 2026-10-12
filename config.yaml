@@ -1,0 +1,39 @@
+rules:
+  - name: telegram
+    behavior: domain
+    sources:
+      - https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs
+      - https://raw.githubusercontent.com/Davoyan/mihomo-rule-sets/main/domains/additional-telegram-domains.yaml
+
+  - name: telegram
+    behavior: ipcidr
+    sources:
+      - https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs
+      - https://raw.githubusercontent.com/Davoyan/mihomo-rule-sets/main/domains/additional-telegram-ips.yaml
+
+  - name: spotify
+    behavior: domain
+    sources:
+      - https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs
+      - rules/spotify/domain.txt
+
+  - name: instagram
+    behavior: domain
+    sources:
+      - https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/instagram.mrs
+      - rules/instagram/domain.txt
+
+  - name: sonos
+    behavior: domain
+    sources:
+      - rules/sonos/domain.txt
+
+  - name: mozilla
+    behavior: domain
+    sources:
+      - rules/mozilla/domain.txt
+
+  - name: valve
+    behavior: ipcidr
+    sources:
+      - rules/valve/ipcidr.txt

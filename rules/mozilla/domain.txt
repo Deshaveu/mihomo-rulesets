@@ -1,0 +1,7 @@
++.mozilla.com
++.mozilla.org
++.mozilla.net
++.firefox.com
++.firefox-portal-detection.com
+mozilla.cloudflare-dns.com
+firefox.dns.nextdns.io

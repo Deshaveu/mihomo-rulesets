@@ -1,0 +1,52 @@
+name: Fetch and Release Lists
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'   # every sunday at 00:00 UTC
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  fetch-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
+      - name: Download mihomo
+        run: |
+          MIHOMO_URL=$(curl -Ls https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | jq -r '.assets[] | select(.name | test("mihomo-linux-amd64-v3-v.*\\.gz$")) | .browser_download_url')
+          curl -sSLf "$MIHOMO_URL" -o mihomo.gz
+          gunzip mihomo.gz
+          chmod +x mihomo
+
+      - name: Run Go builder
+        run: |
+          go run main.go -config config.yaml -out output -mihomo ./mihomo -build-mrs
+
+      - name: Create unique tag
+        id: uniq
+        run: |
+          echo "id=lists-$(date -u +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+      - name: Upload assets to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.uniq.outputs.id }}
+          name: "Rule-Sets ${{ steps.uniq.outputs.id }}"
+          make_latest: true
+          files: |
+            output/*@*.mrs
+            output/*@*.list
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

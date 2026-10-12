@@ -1,4 +1,4 @@
-# Mihomo Rule-Sets
+# Mihomo RuleSets
 
 Скомпилированные бинарные правила (`.mrs`) и текстовые списки (`.list`) для Mihomo / Clash Meta.
 

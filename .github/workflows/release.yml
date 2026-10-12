@@ -2,8 +2,8 @@ name: Fetch and Release Lists
 
 on:
   push:
-      branches:
-        - main
+    branches:
+      - main
   schedule:
     - cron: '0 0 * * 0'   # every sunday at 00:00 UTC
   workflow_dispatch:

@@ -3,8 +3,8 @@
 Скомпилированные бинарные правила (`.mrs`) и текстовые списки (`.list`) для Mihomo / Clash Meta.
 
 Некоторые правила были взяты из этих репозиториев:
-[MetaCubeX](https://github.com/MetaCubeX/meta-rules-dat)
-[Davoyan](https://github.com/Davoyan/mihomo-rule-sets)
+- [MetaCubeX](https://github.com/MetaCubeX/meta-rules-dat)
+- [Davoyan](https://github.com/Davoyan/mihomo-rule-sets)
 
 Кастомные списки будут дополняться.
 

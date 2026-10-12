@@ -1,0 +1,5 @@
++.deepl.com
++.usercentrics.eu
++.qualified.com
+o209747.ingest.us.sentry.io
+images.ctfassets.net

@@ -37,3 +37,23 @@ rules:
     behavior: ipcidr
     sources:
       - rules/valve/ipcidr.txt
+
+  - name: tiktok-additional
+    behavior: domain
+    sources:
+      - rules/tiktok-additional/domain.txt
+
+  - name: keenetic
+    behavior: domain
+    sources:
+      - rules/keenetic/domain.txt
+
+  - name: netcraze
+    behavior: domain
+    sources:
+      - rules/netcraze/domain.txt
+
+  - name: deepl
+    behavior: domain
+    sources:
+      - rules/deepl/domain.txt

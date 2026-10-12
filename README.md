@@ -23,6 +23,10 @@ rule-providers:
   spotify@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/spotify@domain.mrs }
   instagram@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/instagram@domain.mrs }
   mozilla@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/mozilla@domain.mrs }
+  tiktok-additional@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/tiktok-additional@domain.mrs }
+  keenetic@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/keenetic@domain.mrs }
+  netcraze@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/netcraze@domain.mrs }
+  deepl@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/deepl@domain.mrs }
 
 rules:
   - RULE-SET,telegram@domain,PROXY
@@ -32,4 +36,8 @@ rules:
   - RULE-SET,instagram@domain,PROXY
   - RULE-SET,spotify@domain,PROXY
   - RULE-SET,mozilla@domain,DIRECT
+  - RULE-SET,tiktok-additional@domain,DIRECT
+  - RULE-SET,keenetic@domain,DIRECT
+  - RULE-SET,netcraze@domain,DIRECT
+  - RULE-SET,deepl@domain,PROXY
   - MATCH,DIRECT

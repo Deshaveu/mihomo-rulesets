@@ -51,5 +51,6 @@ jobs:
           files: |
             output/*@*.mrs
             output/*@*.list
+            output/*@*.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

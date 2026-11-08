@@ -1,0 +1,6 @@
+mp-ru-prod.appsmb.com
++.msmartlife.net
+api-ru.mzrobo.com
++.midea.com
+midea-idcp.s3.us-west-2.amazonaws.com
+qrscan.aiiciot.com

@@ -1,6 +1,6 @@
 # Mihomo RuleSets
 
-Скомпилированные бинарные правила (`.mrs`) и текстовые списки (`.list`) для Mihomo / Clash Meta.
+Скомпилированные бинарные правила (`.mrs`), текстовые списки (`.list`) и YAML-правила (`.yaml`) для Mihomo / Clash Meta.
 
 Некоторые правила были взяты из этих репозиториев:
 - [MetaCubeX](https://github.com/MetaCubeX/meta-rules-dat)
@@ -14,6 +14,7 @@
 anchors:
   a1: &domain { type: http, format: mrs, behavior: domain, interval: 86400 }
   a2: &ipcidr { type: http, format: mrs, behavior: ipcidr, interval: 86400 }
+  a3: &classical { type: http, format: yaml, behavior: classical, interval: 86400 }
 
 rule-providers:
   telegram@ipcidr: { <<: *ipcidr, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/telegram@ipcidr.mrs }
@@ -27,6 +28,8 @@ rule-providers:
   keenetic@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/keenetic@domain.mrs }
   netcraze@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/netcraze@domain.mrs }
   deepl@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/deepl@domain.mrs }
+  smarthome@domain: { <<: *domain, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/smarthome@domain.mrs }
+  openai@classical: { <<: *classical, url: https://github.com/Deshaveu/mihomo-rulesets/releases/latest/download/openai@classical.yaml }
 
 rules:
   - RULE-SET,telegram@domain,PROXY
@@ -40,4 +43,6 @@ rules:
   - RULE-SET,keenetic@domain,DIRECT
   - RULE-SET,netcraze@domain,DIRECT
   - RULE-SET,deepl@domain,PROXY
+  - RULE-SET,smarthome@domain,DIRECT
+  - RULE-SET,openai@classical,PROXY
   - MATCH,DIRECT

@@ -18,7 +18,7 @@ import (
 
 type RuleItem struct {
 	Name     string   `yaml:"name"`
-	Behavior string   `yaml:"behavior"` // domain or ipcidr
+	Behavior string   `yaml:"behavior"` // domain, ipcidr, or classical
 	Sources  []string `yaml:"sources"`
 }
 
@@ -52,7 +52,7 @@ func fetchBytes(source string) ([]byte, error) {
 	return os.ReadFile(source)
 }
 
-func cleanLine(line string) string {
+func cleanLine(line string, behavior string) string {
 	line = strings.TrimSpace(line)
 	if line == "" || strings.HasPrefix(line, "#") || strings.HasPrefix(line, "//") {
 		return ""
@@ -60,6 +60,11 @@ func cleanLine(line string) string {
 
 	line = strings.TrimPrefix(line, "- ")
 	line = strings.TrimSpace(line)
+
+	if strings.EqualFold(behavior, "classical") {
+		line = strings.Trim(line, `"' `)
+		return strings.TrimSpace(line)
+	}
 
 	prefixes := []string{
 		"IP-CIDR,", "IP-CIDR6,", "IP-CIDR6 ", "IP-CIDR ",
@@ -80,12 +85,12 @@ func cleanLine(line string) string {
 	return strings.TrimSpace(line)
 }
 
-func parseTextOrYaml(raw []byte) []string {
+func parseTextOrYaml(raw []byte, behavior string) []string {
 	var cp ClashPayload
 	if err := yaml.Unmarshal(raw, &cp); err == nil && len(cp.Payload) > 0 {
 		var res []string
 		for _, item := range cp.Payload {
-			cleaned := cleanLine(item)
+			cleaned := cleanLine(item, behavior)
 			if cleaned != "" {
 				res = append(res, cleaned)
 			}
@@ -96,7 +101,7 @@ func parseTextOrYaml(raw []byte) []string {
 	var res []string
 	scanner := bufio.NewScanner(strings.NewReader(string(raw)))
 	for scanner.Scan() {
-		cleaned := cleanLine(scanner.Text())
+		cleaned := cleanLine(scanner.Text(), behavior)
 		if cleaned != "" {
 			res = append(res, cleaned)
 		}
@@ -129,7 +134,7 @@ func parseMrs(mihomoPath, behavior, source, tempDir string) ([]string, error) {
 		return nil, err
 	}
 
-	return parseTextOrYaml(txtBytes), nil
+	return parseTextOrYaml(txtBytes, behavior), nil
 }
 
 func main() {
@@ -163,6 +168,7 @@ func main() {
 	for _, rule := range cfg.Rules {
 		baseName := fmt.Sprintf("%s@%s", rule.Name, rule.Behavior)
 		listPath := filepath.Join(*outDir, baseName+".list")
+		yamlPath := filepath.Join(*outDir, baseName+".yaml")
 		mrsPath := filepath.Join(*outDir, baseName+".mrs")
 
 		fmt.Printf("==> Processing: %s\n", baseName)
@@ -179,7 +185,7 @@ func main() {
 				var raw []byte
 				raw, err = fetchBytes(src)
 				if err == nil {
-					items = parseTextOrYaml(raw)
+					items = parseTextOrYaml(raw, rule.Behavior)
 				}
 			}
 
@@ -211,8 +217,17 @@ func main() {
 		}
 		fmt.Printf("  [OK] Generated text: %s (%d records)\n", listPath, len(uniqueList))
 
-		// Compilation into .mrs if the flag is set
-		if *buildMrs {
+		yamlBytes, err := yaml.Marshal(ClashPayload{Payload: uniqueList})
+		if err != nil {
+			fmt.Printf("  [ERROR] YAML marshal error for %s: %v\n", yamlPath, err)
+		} else if err := os.WriteFile(yamlPath, yamlBytes, 0644); err != nil {
+			fmt.Printf("  [ERROR] Write error for %s: %v\n", yamlPath, err)
+		} else {
+			fmt.Printf("  [OK] Generated yaml: %s (%d records)\n", yamlPath, len(uniqueList))
+		}
+
+		// Compilation into .mrs if the flag is set (supported only for domain and ipcidr)
+		if *buildMrs && !strings.EqualFold(rule.Behavior, "classical") {
 			cmd := exec.Command(*mihomoBin, "convert-ruleset", rule.Behavior, "text", listPath, mrsPath)
 			if out, err := cmd.CombinedOutput(); err != nil {
 				fmt.Printf("  [ERROR] Failed to compile %s: %s\n", mrsPath, string(out))

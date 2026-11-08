@@ -57,3 +57,13 @@ rules:
     behavior: domain
     sources:
       - rules/deepl/domain.txt
+
+  - name: openai
+    behavior: classical
+    sources:
+      - rules/openai/rules.yaml
+
+  - name: smarthome
+    behavior: domain
+    sources:
+      - rules/smarthome/domain.txt
